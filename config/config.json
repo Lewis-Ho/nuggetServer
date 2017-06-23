@@ -1,0 +1,9 @@
+{
+  "nuggetDb": {
+    "host": "collegenugget.cpfgohlas9p3.us-east-2.rds.amazonaws.com",
+    "user": "nuggetAdmin",
+    "password": "kindhat40",
+    "port": "3306",
+    "database": "Users"
+  }
+}
