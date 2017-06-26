@@ -1,12 +1,13 @@
-const express = require('express');
-const path = require('path');
-const port = process.env.PORT || 8008;
-const app = express();
-const fs = require('fs');
-const csv = require('csvtojson');
-const firebase = require("firebase");
-const config = require("./config/config.json");
-// const User = require("./src/utils/user");
+var express = require('express');
+var path = require('path');
+var port = process.env.PORT || 8008;
+var app = express();
+var fs = require('fs');
+var csv = require('csvtojson');
+var firebase = require("firebase");
+var config = require("./config/config.json");
+
+var order = require(path.join(__dirname, 'controllers', 'order'));
 
 
 firebase.initializeApp(config.Firebase);
@@ -18,8 +19,41 @@ app.get('/', (req, res) => {
 });
 
 app.get('/status', (req, res) => {
-  res.send(200, "<status>OK</status>");
+	res.status(200).send("<status>OK</status>");
+
+	var mysql      = require('mysql');
+	var connection = mysql.createConnection(config.nuggetDb);
+
+	connection.connect(function(err) {
+	  if (err) {
+	    console.error('error connecting: ' + err.stack);
+	    return;
+	  }
+
+	  console.log('connected as id ' + connection.threadId);
+	});
+
+
+
+// working example
+	// var mysql      = require('mysql');
+	// var connection = mysql.createConnection(config.nuggetDb);
+	//
+	// connection.connect();
+	//
+	// connection.query('SELECT * FROM nuggetdb.Order', function (error, results, fields) {
+	// 	console.log('return')
+	// 	console.log(results)
+	// 	if (error) throw error;
+	// 	// console.log('The solution is: ', results[0].solution);
+	// });
+	//
+	// connection.end();
 });
+
+
+app.get('/order/all', order.getAllOrders);
+
 
 app.get('/login', (req, res) => {
 	console.log('login')

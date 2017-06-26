@@ -1,14 +1,14 @@
 var path = require('path'),
     Promise = require("bluebird"),
     log = require('winston'),
-    pool = require(path.join(__dirname, '..', '..', 'libs', 'pool')),
-    request = require('request'),
-    config = require(path.join(__dirname, '..','..', 'conf'));
+    pool = require(path.join(__dirname, '..', 'libs', 'pool'));
+    // request = require('request');
+    // config = require(path.join(__dirname, '..','..', 'conf'));
 
 
-exports.test = function (){
+exports.getAllOrders = function (){
   return new Promise(function(resolve, reject) {
-    var sql = 'SELECT * FROM innodb.`order`;'
+    var sql = 'SELECT * FROM nuggetdb.Order'
 
     pool.getConnection(function(err, connection) {
       if (err || typeof connection === "undefined") {
@@ -24,9 +24,7 @@ exports.test = function (){
              if (err)
                   reject(err);
                 else{
-                  console.log('successful. response')
-                  console.log(response)
-                  resolve(response)
+                  resolve(response[0])
                 }
           });
         }

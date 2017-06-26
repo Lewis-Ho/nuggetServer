@@ -1,51 +1,12 @@
-// var mysql = require('mysql'),
-//   // path = require('path'),
-//   // log = require('winston'),
-//   config = require(path.join(__dirname, 'config', 'config.json'));
-//
-// function handleDisconnect(connection) {
-//   connection.on('error', function(err) {
-//     if (!err.fatal) {
-//       return;
-//     }
-//
-//     if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-//       throw err;
-//     }
-//
-//     log.warn('Re-connecting lost connection: ' + err.message);
-//     connection = mysql.createConnection(connection.config);
-//     handleDisconnect(connection);
-//     connection.connect(function(err) {
-//       if (err)
-//         log.error('Database reconnection error: ' + err.message);
-//     });
-//   });
-// }
-//
-// var db_config = config.get("nuggetDb");
-// console.log('In pool.js')
-// console.log(nuggetDb)
-//
-// db_config.createConnection = function createConnection(config) {
-//   connection = mysql.createConnection(config);
-//   handleDisconnect(connection);
-//   return connection;
-// };
-//
-// module.exports = mysql.createPool({
-//   host     : 'collegenugget.cpfgohlas9p3.us-east-2.rds.amazonaws.com',
-//   user     : 'nuggetAdmin',
-//   password : 'kindhat40',
-//   database : 'Users'
-// });
-
-
-
 var mysql = require('mysql'),
-  path = require('path'),
-  log = require('winston'),
-  config = require(path.join(__dirname, '..', 'conf'));
+    path = require('path'),
+    log = require('winston'),
+    config = require(path.join(__dirname, '..', 'conf'));
+
+var db_config = config.get("nuggetDb");
+
+console.log("db_config")
+console.log(db_config)
 
 function handleDisconnect(connection) {
   connection.on('error', function(err) {
@@ -70,20 +31,12 @@ function handleDisconnect(connection) {
   });
 }
 
-var db_config = config.get("database");
-
-
 db_config.createConnection = function createConnection(config) {
-
+  console.log('trying to connecting to db')
   connection = mysql.createConnection(config);
   handleDisconnect(connection);
   return connection;
 };
 
 
-module.exports = mysql.createPool({
-  host     : 'collegenugget.cpfgohlas9p3.us-east-2.rds.amazonaws.com',
-  user     : 'nuggetAdmin',
-  password : 'kindhat40',
-  database : 'Users'
-});
+module.exports = mysql.createPool(db_config);

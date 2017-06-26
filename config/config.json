@@ -4,6 +4,6 @@
     "user": "nuggetAdmin",
     "password": "kindhat40",
     "port": "3306",
-    "database": "Users"
+    "database": "nuggetdb"
   }
 }

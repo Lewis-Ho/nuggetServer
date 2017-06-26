@@ -1,17 +1,18 @@
 var path = require('path'),
+    log = require('winston'),
+    Promise = require("bluebird"),
     order_model = require(path.join(__dirname, '..',  'models', 'order_model'));
 
-exports.get = function(req, res, next) {
-  var order_number = req.params.order_number;
+exports.getAllOrders = function(req, res, next) {
+  console.log('getAllOrders')
   try {
-      promise = order_model.get(order_number);
-      
-      promise.then(function(response) {
-         res.send(200, {status:true, message: response.data});
-      }).fail(function(response) {
-           res.send(400, {
-              error: "Order failed to retrieved"
-           });
+      Promise = order_model.getAllOrders();
+      Promise.then(function(response) {
+        res.status(200).send({
+          "status":true, "message": response
+        });
+      }).catch(e => {
+        throw e;
       });
   } catch (error) {
     log.error(error.stack);
@@ -20,26 +21,4 @@ exports.get = function(req, res, next) {
     });
     next(error);
   }
-}
-
-exports.cancel =  function(req, res, next) {
-    var order_number = req.params.order_number;
-    try {
-        promise = order_model.cancelOrder(order_number);
-        promise.then(function(response) {
-
-           res.send(200, {status:true, message:"Order number "+order_number+" was cancelled"});
-
-        }).fail(function(response) {
-             res.send(400, {
-                error: "Order could not be cancelled"
-             });
-        });
-    }catch (error) {
-      log.error(error.stack);
-      res.send(500, {
-        error:   "Order could not be cancelled"
-      });
-      next(error);
-   }
 }
