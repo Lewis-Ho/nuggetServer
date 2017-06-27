@@ -5,10 +5,16 @@ var app = express();
 var fs = require('fs');
 var csv = require('csvtojson');
 var firebase = require("firebase");
+var bodyParser = require('body-parser')
 var config = require("./config/config.json");
 
 var order = require(path.join(__dirname, 'controllers', 'order'));
 
+
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
 
 firebase.initializeApp(config.Firebase);
 
@@ -53,7 +59,8 @@ app.get('/status', (req, res) => {
 
 
 app.get('/order/all', order.getAllOrders);
-
+app.get('/order/:id', order.getOrderByOrderId);
+app.post('/order/create', order.createOrder);
 
 app.get('/login', (req, res) => {
 	console.log('login')
