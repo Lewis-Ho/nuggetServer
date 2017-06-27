@@ -58,9 +58,29 @@ app.get('/status', (req, res) => {
 });
 
 
-app.get('/order/all', order.getAllOrders);
+app.get('/order/all', order.all);
 app.get('/order/:id', order.getOrderByOrderId);
 app.post('/order/create', order.createOrder);
+
+//
+// app.get('/order/user/:uid', order.getOrdersByUserId);
+// app.get('/order/user/:uid/all', order.getAllOrdersByUserId);
+// app.get('/order/:id/revision', order.getRevisionsByOrderId);
+// app.post('/order/:id/revision/create', order.createRevision);
+// app.get('/order/:id/history', order.getOrderHistoryById);
+// app.post('/order/history/create', order.createOrderHistory);
+//
+// app.post('/user/create', user.createUser);
+// app.get('/user/:uid', user.getUserById);
+// app.get('/user/:uid/credit', user.getCreditById);
+// app.post('/user/:uid/credit/update', user.updateUserCredit);
+// app.get('/user/:uid/history', user.getUserOrderHistory);
+//
+//
+//
+
+
+
 
 app.get('/login', (req, res) => {
 	console.log('login')

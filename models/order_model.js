@@ -6,9 +6,9 @@ var path = require('path'),
     // config = require(path.join(__dirname, '..','..', 'conf'));
 
 
-exports.getAllOrders = function (){
+exports.all = function (){
   return new Promise(function(resolve, reject) {
-    var sql = 'SELECT * FROM nuggetdb.Order'
+    var sql = 'SELECT * FROM nuggetdb.order'
 
     pool.getConnection(function(err, connection) {
       if (err || typeof connection === "undefined") {
@@ -34,7 +34,7 @@ exports.getAllOrders = function (){
 
 exports.getOrderByOrderId = function (id){
   return new Promise(function(resolve, reject) {
-    var sql = 'SELECT * FROM nuggetdb.Order WHERE id=?'
+    var sql = 'SELECT * FROM nuggetdb.order WHERE id=?'
 
     pool.getConnection(function(err, connection) {
       if (err || typeof connection === "undefined") {
@@ -60,7 +60,7 @@ exports.getOrderByOrderId = function (id){
 
 exports.createOrder = function (user_id, cat){
   return new Promise(function(resolve, reject) {
-    var sql = 'INSERT INTO nuggetdb.Order SET ?'
+    var sql = 'INSERT INTO nuggetdb.order SET ?'
 
     pool.getConnection(function(err, connection) {
       if (err || typeof connection === "undefined") {
