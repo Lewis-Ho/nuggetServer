@@ -136,3 +136,66 @@ exports.createRevision = function(req, res, next) {
     next(error);
   }
 }
+
+
+exports.getRevisionById = function(req, res, next) {
+  console.log('getRevisionById')
+  if (!req.params.id) {
+    res.status(400).send({
+      "status":false, "message": "Missing revision id param"
+    });
+  }
+  var rid = req.params.id;
+  try {
+    // INSERT INTO nuggetdb.Order SET user_id='10002',category='resume'
+      Promise = order_model.getRevisionById(rid);
+      Promise.then(function(response) {
+        res.status(200).send({
+          "status":true, "message": response
+        });
+      }).catch(e => {
+        throw e;
+      });
+  } catch (error) {
+    log.error(error.stack);
+    res.send(500, {
+      error: "Failed to create revision"
+    });
+    next(error);
+  }
+}
+
+
+exports.updateRevisionStatus = function(req, res, next) {
+  console.log('updateRevisionStatus')
+  if (!req.params.id || !req.params.status) {
+    res.status(400).send({
+      "status":false, "message": "Request body is missing required properties"
+    });
+  }
+  var revisionId = req.params.id;
+  var status = req.params.status;
+  try {
+    order_model.getRevisionById(revisionId).then(function(result){
+      if (result && Object.keys(result).length > 0 ) {
+        return order_model.updateRevisionStatus(revisionId, status)
+      } else {
+        res.status(404).send({
+          "status":false, "message": "Revision not found"
+        });
+      }
+    }).then(function(response) {
+      res.status(200).send({
+        "status":true, "message": response
+      });
+    }).catch(e => {
+      throw e;
+    });
+  } catch (error) {
+    log.error(error.stack);
+    res.send(500, {
+      error: "Failed to create order"
+    });
+    next(error);
+  }
+}

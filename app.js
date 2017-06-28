@@ -63,6 +63,8 @@ app.get('/order/all', order.all);
 app.get('/order/:id', order.getOrderByOrderId);
 app.get('/order/user/:uid', order.getOrdersByUserId);
 app.post('/order/revision/create', order.createRevision);
+app.get('/order/revision/:id', order.getRevisionById);
+app.get('/order/revision/:id/update/status/:status', order.updateRevisionStatus);
 
 // app.get('/order/:id/revision', order.getRevisionsByOrderId);
 // app.get('/order/:id/history', order.getOrderHistoryById);

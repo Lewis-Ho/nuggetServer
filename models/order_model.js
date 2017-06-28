@@ -61,6 +61,33 @@ exports.getOrderByOrderId = function (id){
 }
 
 
+exports.getRevisionById = function (id){
+  return new Promise(function(resolve, reject) {
+    var sql = 'SELECT * FROM nuggetdb.revision WHERE revision_id=?'
+
+    pool.getConnection(function(err, connection) {
+      if (err || typeof connection === "undefined") {
+        log.error("Unable to get a connection to the DB due to: " + err);
+        console.log ("Unable to get a connection to the DB due to: " + err);
+        reject(err);
+        if (connection)
+          connection.destroy();
+      } else {
+
+          var query=connection.query(sql, [id], function (err, response) {
+              connection.release();
+             if (err)
+                  reject(err);
+                else{
+                  resolve(response[0])
+                }
+          });
+        }
+    });
+  });
+}
+
+
 exports.getOrdersByUserId = function (uid) {
   return new Promise(function(resolve, reject) {
     var sql = 'SELECT * FROM nuggetdb.order WHERE user_id=?'
@@ -156,6 +183,32 @@ exports.createRevision = function (obj){
               else{
                 resolve(response[0])
               }
+        });
+      }
+    });
+  });
+}
+
+
+exports.updateRevisionStatus = function (revisionId, status){
+  return new Promise(function(resolve, reject) {
+    var sql = 'UPDATE nuggetdb.revision SET status=? WHERE revision_id=? '
+
+    pool.getConnection(function(err, connection) {
+      if (err || typeof connection === "undefined") {
+        log.error("Unable to get a connection to the DB due to: " + err);
+        console.log ("Unable to get a connection to the DB due to: " + err);
+        reject(err);
+        if (connection)
+          connection.destroy();
+      } else {
+        var query = connection.query(sql, [status, revisionId], function (err, response) {
+            connection.release();
+           if (err)
+              reject(err);
+            else{
+              resolve(response[0])
+            }
         });
       }
     });
