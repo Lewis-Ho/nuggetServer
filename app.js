@@ -9,6 +9,7 @@ var bodyParser = require('body-parser')
 var config = require("./config/config.json");
 
 var order = require(path.join(__dirname, 'controllers', 'order'));
+var user = require(path.join(__dirname, 'controllers', 'user'));
 
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -67,7 +68,7 @@ app.post('/order/revision/create', order.createRevision);
 // app.get('/order/:id/history', order.getOrderHistoryById);
 // app.post('/order/history/create', order.createOrderHistory);
 //
-// app.post('/user/create', user.createUser);
+app.post('/user/create', user.createUser);
 // app.get('/user/:uid', user.getUserById);
 // app.get('/user/:uid/credit', user.getCreditById);
 // app.post('/user/:uid/credit/update', user.updateUserCredit);
