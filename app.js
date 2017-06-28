@@ -57,16 +57,13 @@ app.get('/status', (req, res) => {
 	// connection.end();
 });
 
-
+app.post('/order/create', order.createOrder);
 app.get('/order/all', order.all);
 app.get('/order/:id', order.getOrderByOrderId);
-app.post('/order/create', order.createOrder);
+app.get('/order/user/:uid', order.getOrdersByUserId);
+app.post('/order/revision/create', order.createRevision);
 
-//
-// app.get('/order/user/:uid', order.getOrdersByUserId);
-// app.get('/order/user/:uid/all', order.getAllOrdersByUserId);
 // app.get('/order/:id/revision', order.getRevisionsByOrderId);
-// app.post('/order/:id/revision/create', order.createRevision);
 // app.get('/order/:id/history', order.getOrderHistoryById);
 // app.post('/order/history/create', order.createOrderHistory);
 //
