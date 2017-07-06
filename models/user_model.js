@@ -35,3 +35,57 @@ exports.createUser = function (obj){
     });
   });
 }
+
+
+exports.getUserById = function (id){
+  return new Promise(function(resolve, reject) {
+    var sql = 'SELECT * FROM nuggetdb.user WHERE id=?'
+
+    pool.getConnection(function(err, connection) {
+      if (err || typeof connection === "undefined") {
+        log.error("Unable to get a connection to the DB due to: " + err);
+        console.log ("Unable to get a connection to the DB due to: " + err);
+        reject(err);
+        if (connection)
+          connection.destroy();
+      } else {
+
+          var query=connection.query(sql, [id], function (err, response) {
+              connection.release();
+             if (err)
+                  reject(err);
+                else{
+                  resolve(response[0])
+                }
+          });
+        }
+    });
+  });
+}
+
+
+exports.getCreditById = function (id){
+  return new Promise(function(resolve, reject) {
+    var sql = 'SELECT * FROM nuggetdb.user WHERE id=?'
+
+    pool.getConnection(function(err, connection) {
+      if (err || typeof connection === "undefined") {
+        log.error("Unable to get a connection to the DB due to: " + err);
+        console.log ("Unable to get a connection to the DB due to: " + err);
+        reject(err);
+        if (connection)
+          connection.destroy();
+      } else {
+
+          var query=connection.query(sql, [id], function (err, response) {
+              connection.release();
+             if (err)
+                  reject(err);
+                else{
+                  resolve(response[0])
+                }
+          });
+        }
+    });
+  });
+}

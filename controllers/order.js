@@ -169,9 +169,8 @@ exports.getRevisionById = function(req, res, next) {
 exports.updateRevisionStatus = function(req, res, next) {
   console.log('updateRevisionStatus')
   if (!req.params.id || !req.params.status) {
-    res.status(400).send({
-      "status":false, "message": "Request body is missing required properties"
-    });
+    res.status(400).send({ error: "Bad Request - Invalid rows parameter" })
+    return;
   }
   var revisionId = req.params.id;
   var status = req.params.status;
@@ -180,9 +179,8 @@ exports.updateRevisionStatus = function(req, res, next) {
       if (result && Object.keys(result).length > 0 ) {
         return order_model.updateRevisionStatus(revisionId, status)
       } else {
-        res.status(404).send({
-          "status":false, "message": "Revision not found"
-        });
+        res.status(404).send({ error: "Revision not found" })
+        return;
       }
     }).then(function(response) {
       res.status(200).send({
@@ -193,7 +191,7 @@ exports.updateRevisionStatus = function(req, res, next) {
     });
   } catch (error) {
     log.error(error.stack);
-    res.send(500, {
+    res.send(error.status || 500, {
       error: "Failed to create order"
     });
     next(error);

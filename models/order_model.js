@@ -175,7 +175,8 @@ exports.createRevision = function (obj){
           "billing_state": tools.genHash(obj.billing_state, 'md5'),
           "billing_postal_code": tools.genHash(obj.billing_postal_code, 'md5'),
           "billing_country": obj.billing_country,
-          "billing_email": tools.genHash(obj.billing_email, 'md5')
+          "billing_email": tools.genHash(obj.billing_email, 'md5'),
+          "source_url": obj.source_url
         }, function (err, response) {
             connection.release();
            if (err)
