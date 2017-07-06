@@ -12,14 +12,18 @@ var order = require(path.join(__dirname, 'controllers', 'order'));
 var user = require(path.join(__dirname, 'controllers', 'user'));
 
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, cid, Authorization")
+  next();
+});
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
-
-firebase.initializeApp(config.Firebase);
-
 app.use(express.static(__dirname));
+firebase.initializeApp(config.Firebase);
 
 app.get('/', (req, res) => {
 	res.sendFile(path.resolve(__dirname, 'index.html'))
