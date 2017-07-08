@@ -72,7 +72,7 @@ app.get('/order/revision/:id/update/status/:status', order.updateRevisionStatus)
 
 // app.get('/order/:id/revision', order.getRevisionsByOrderId);
 // app.get('/order/:id/history', order.getOrderHistoryById);
-// app.post('/order/history/create', order.createOrderHistory);
+app.post('/order/history/create', order.createOrderHistory);
 //
 app.post('/user/create', user.createUser);
 app.get('/user/:uid', user.getUserById);

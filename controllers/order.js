@@ -108,7 +108,6 @@ exports.createRevision = function(req, res, next) {
   // INSERT INTO nuggetdb.Order SET user_id='10002',category='resume'
   Promise = order_model.createRevision(body);
   Promise.then(function(response) {
-    console.log('then function')
     console.log(response)
     res.status(200).send({
       "status":true, "message": response
@@ -171,6 +170,30 @@ exports.updateRevisionStatus = function(req, res, next) {
     log.error(e.stack);
     res.status(e.status || 500).send({
       error: "Failed to update revision status: "+e.message
+    });
+    next(e);
+  });
+}
+
+exports.createOrderHistory = function(req, res, next) {
+  console.log('createOrderHistory')
+  if (!req.body.order_id || !req.body.user_id) {
+    res.status(400).send({
+      "status":false, "message": "Request body is missing required properties"
+    });
+  }
+  var body = req.body;
+  Promise = order_model.createOrderHistory(body);
+  Promise.then(function(response) {
+    console.log('then function')
+    console.log(response)
+    res.status(200).send({
+      "status":true, "message": response
+    });
+  }).catch(e => {
+    log.error(e.stack);
+    res.status(500).send({
+      error: "Failed to create order history: "+e.message
     });
     next(e);
   });

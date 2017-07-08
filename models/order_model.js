@@ -167,6 +167,7 @@ exports.createRevision = function (obj){
           "user_id": obj.user_id,
           "status": obj.status,
           "total": obj.total,
+          "type": obj.type,
           "payment_type": "credit",
           "shipping_rate": "regular",
           "currency": "USD",
@@ -242,6 +243,38 @@ exports.updateRevisionStatus = function (revisionId, status){
             else{
               resolve(response[0])
             }
+        });
+      }
+    });
+  });
+}
+
+
+exports.createOrderHistory = function (transactionData, cat){
+  return new Promise(function(resolve, reject) {
+    var sql = 'INSERT INTO nuggetdb.transaction_history SET ?'
+
+    pool.getConnection(function(err, connection) {
+      if (err || typeof connection === "undefined") {
+        log.error("Unable to get a connection to the DB due to: " + err);
+        console.log ("Unable to get a connection to the DB due to: " + err);
+        reject(err);
+        if (connection)
+          connection.destroy();
+      } else {
+        var query = connection.query(sql, {
+          "user_id": transactionData.user_id,
+          "order_id": transactionData.order_id,
+          "revision_id": transactionData.revision_id,
+          "type": transactionData.type,
+          "credit_ammount": transactionData.credit_ammount
+        }, function (err, response) {
+          connection.release();
+          if (err)
+            reject(err);
+          else{
+            resolve(response[0])
+          }
         });
       }
     });

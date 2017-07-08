@@ -33,3 +33,6 @@ $ node app.js
 Go to AWS -> EC2 -> Instance -> Security Groups -> Choose the security group -> inbound edit -> Choose SSH and add your IP
 
 If you need direct read/write to RDS you will need to do the same thing for AWS RDS, instead you choose TCP, port 3306, your IP
+
+
+### 6. To debug, you will need to ssh to instance. PM2 instruction is required to restart server. Contact admin for ssh pem.
