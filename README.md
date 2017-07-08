@@ -28,6 +28,8 @@ Customize your local config settings in the file `config/config.json` Contact Le
 $ node app.js
 ```
 
-### 5.You may need to punch a hole on AWS RDS instance for different IP access
+### 5.You may need to punch a hole on AWS instance for different IP access
 
-Go to AWS -> EC2 -> Security Groups -> Choose the security group -> inbound edit -> Add TCP, port number and your IP
+Go to AWS -> EC2 -> Instance -> Security Groups -> Choose the security group -> inbound edit -> Choose SSH and add your IP
+
+If you need direct read/write to RDS you will need to do the same thing for AWS RDS, instead you choose TCP, port 3306, your IP
