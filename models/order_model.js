@@ -113,7 +113,6 @@ exports.getOrdersByUserId = function (uid) {
   });
 }
 
-
 exports.createOrder = function (user_id, cat){
   return new Promise(function(resolve, reject) {
     var sql = 'INSERT INTO nuggetdb.order SET ?'
@@ -130,12 +129,17 @@ exports.createOrder = function (user_id, cat){
           "user_id": user_id,
           "category": cat
         }, function (err, response) {
-            connection.release();
-           if (err)
-                reject(err);
-              else{
-                resolve(response[0])
-              }
+          var order = {
+            "id": response.insertId,
+            "user_id": user_id,
+            "category": cat
+          }
+          connection.release();
+          if (err)
+            reject(err);
+          else{
+            resolve(order)
+          }
         });
       }
     });
@@ -145,6 +149,7 @@ exports.createOrder = function (user_id, cat){
 
 exports.createRevision = function (obj){
   return new Promise(function(resolve, reject) {
+    console.log('order_model createRevision')
     var sql = 'INSERT INTO nuggetdb.revision SET ?'
 
     pool.getConnection(function(err, connection) {
@@ -155,7 +160,8 @@ exports.createRevision = function (obj){
         if (connection)
           connection.destroy();
       } else {
-        var query = connection.query(sql, {
+
+        var revision = {
           "revision_id": tools.genRevision(),
           "order_id": obj.order_id,
           "user_id": obj.user_id,
@@ -177,13 +183,39 @@ exports.createRevision = function (obj){
           "billing_country": obj.billing_country,
           "billing_email": tools.genHash(obj.billing_email, 'md5'),
           "source_url": obj.source_url
+        }
+
+        var query = connection.query(sql, {
+          "revision_id": revision.revision_id,
+          "order_id": revision.order_id,
+          "user_id": revision.user_id,
+          "status": revision.status,
+          "total": revision.total,
+          "payment_type": revision.payment_type,
+          "shipping_rate": revision.shipping_rate,
+          "currency": revision.currency,
+          "assigned_editor_id": revision.assigned_editor_id,
+          "billing_first_name": revision.billing_first_name,
+          "billing_last_name": revision.billing_last_name,
+          "billing_phone": revision.billing_phone,
+          "billing_company": revision.billing_company,
+          "billing_street1": revision.billing_street1,
+          "billing_street2": revision.billing_street2,
+          "billing_city": revision.billing_city,
+          "billing_state": revision.billing_state,
+          "billing_postal_code": revision.billing_postal_code,
+          "billing_country": revision.billing_country,
+          "billing_email": revision.billing_email,
+          "source_url": revision.source_url
         }, function (err, response) {
-            connection.release();
-           if (err)
-                reject(err);
-              else{
-                resolve(response[0])
-              }
+          console.log('here')
+          console.log(response)
+          connection.release();
+          if (err)
+            reject(err);
+          else{
+            resolve(revision)
+          }
         });
       }
     });
