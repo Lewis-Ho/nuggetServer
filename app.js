@@ -10,6 +10,7 @@ var config = require("./config/config.json");
 
 var order = require(path.join(__dirname, 'controllers', 'order'));
 var user = require(path.join(__dirname, 'controllers', 'user'));
+var mail = require(path.join(__dirname, 'controllers', 'mail'));
 
 
 app.use(function(req, res, next) {
@@ -82,6 +83,10 @@ app.get('/user/:uid', user.getUserById);
 //
 //
 
+// need
+app.post('/mail/confirm', mail.sendOrderConfirmationEmail);
+app.post('/mail/adminAlert', mail.sendAdminOrderAlert);
+app.post('/mail/orderCompleted', mail.sendOrderCompletedEmail);
 
 
 
