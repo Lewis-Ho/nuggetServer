@@ -74,7 +74,7 @@ exports.getOrdersByUserId = function(req, res, next) {
 exports.createOrder = function(req, res, next) {
   console.log('createOrder')
   if (!req.body.user_id || !req.body.category) {
-    res.status(400).send({
+    return res.status(400).send({
       "status":false, "message": "Request body is missing required properties"
     });
   }
@@ -84,12 +84,12 @@ exports.createOrder = function(req, res, next) {
   // INSERT INTO nuggetdb.Order SET user_id='10002',category='resume'
   Promise = order_model.createOrder(userId, cat);
   Promise.then(function(response) {
-    res.status(200).send({
+    return res.status(200).send({
       "status":true, "message": response
     });
   }).catch(e => {
     log.error(e.stack);
-    res.status(500).send({
+    return res.status(500).send({
       error: "Failed to create order"+e.message
     });
     next(e);
