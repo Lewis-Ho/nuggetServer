@@ -114,6 +114,7 @@ exports.getOrdersByUserId = function (uid) {
 }
 
 exports.createOrder = function (user_id, cat){
+  console.log('createOrder')
   return new Promise(function(resolve, reject) {
     var sql = 'INSERT INTO nuggetdb.order SET ?'
 
@@ -129,6 +130,7 @@ exports.createOrder = function (user_id, cat){
           "user_id": user_id,
           "category": cat
         }, function (err, response) {
+          console.log(response)
           var order = {
             "id": response.insertId,
             "user_id": user_id,
@@ -250,7 +252,7 @@ exports.updateRevisionStatus = function (revisionId, status){
 }
 
 
-exports.createOrderHistory = function (transactionData, cat){
+exports.createOrderHistory = function (transactionData){
   return new Promise(function(resolve, reject) {
     var sql = 'INSERT INTO nuggetdb.transaction_history SET ?'
 
@@ -267,7 +269,7 @@ exports.createOrderHistory = function (transactionData, cat){
           "order_id": transactionData.order_id,
           "revision_id": transactionData.revision_id,
           "type": transactionData.type,
-          "credit_ammount": transactionData.credit_ammount
+          "credit_amount": transactionData.credit_amount
         }, function (err, response) {
           connection.release();
           if (err)
