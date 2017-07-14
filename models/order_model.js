@@ -25,7 +25,7 @@ exports.getAllOrders = function (){
              if (err)
                   reject(err);
                 else{
-                  resolve(response[0])
+                  resolve(response)
                 }
           });
         }
@@ -52,7 +52,7 @@ exports.getOrderByOrderId = function (id){
              if (err)
                   reject(err);
                 else{
-                  resolve(response[0])
+                  resolve(response)
                 }
           });
         }
