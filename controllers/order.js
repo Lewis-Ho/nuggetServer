@@ -204,12 +204,16 @@ exports.updateRevisionReviewed = function(req, res, next) {
     if (result && Object.keys(result).length > 0 ) {
       return order_model.updateRevisionToReviewed(req.params.id, req.body.revised_source_url, req.body.status)
     } else {
-      return res.status(404).send({ error: "Revision not found" })
-      return;
+      return res.status(404).send({ error: "Revision not found" });
     }
-  }).then(function(response) {
-    return res.status(200).send({
-      "status":true, "message": response
+  }).then(function(success) {
+    if (!success) {
+      return res.status(404).send({ error: "Revision fail to update" });
+    }
+    return order_model.getRevisionById(req.params.id).then(function(result){
+      return res.status(200).send({
+        "status":true, "message": result
+      });
     });
   }).catch(e => {
     log.error(e.stack);
@@ -232,10 +236,8 @@ exports.createOrderHistory = function(req, res, next) {
   var body = req.body;
   Promise = order_model.createOrderHistory(body);
   Promise.then(function(response) {
-    console.log('then function')
-    console.log(response)
     return res.status(200).send({
-      "status":true, "message": response
+      "status":true, "message": {}
     });
   }).catch(e => {
     log.error(e.stack);

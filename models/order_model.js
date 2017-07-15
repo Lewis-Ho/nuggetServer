@@ -238,8 +238,6 @@ exports.createRevision = function (obj){
           "billing_email": revision.billing_email,
           "source_url": revision.source_url
         }, function (err, response) {
-          console.log('here')
-          console.log(response)
           connection.release();
           if (err)
             reject(err);
@@ -293,10 +291,10 @@ exports.updateRevisionToReviewed = function (revisionId, sourceUrl, status){
       } else {
         var query = connection.query(sql, [status, sourceUrl, revisionId], function (err, response) {
             connection.release();
-           if (err)
+           if (err && changedRows != 1)
               reject(err);
             else{
-              resolve(response[0])
+              resolve(true)
             }
         });
       }
@@ -330,7 +328,7 @@ exports.createOrderHistory = function (transactionData){
           if (err)
             reject(err);
           else{
-            resolve(response[0])
+            resolve(true)
           }
         });
       }

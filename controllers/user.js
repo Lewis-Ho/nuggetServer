@@ -32,27 +32,23 @@ exports.createUser = function(req, res, next) {
 
 exports.getUserById = function(req, res, next) {
   if (!req.params.uid) {
-    res.status(400).send({
+    return res.status(400).send({
       "status":false, "message": "Missing user id"
     });
   }
   var uid = req.params.uid;
-  try {
-      Promise = user_model.getUserById(uid);
-      Promise.then(function(response) {
-        res.status(200).send({
-          "status":true, "message": response
-        });
-      }).catch(e => {
-        throw e;
-      });
-  } catch (error) {
-    log.error(error.stack);
-    res.send(500, {
-      error: "Order failed to retrieved"
+  Promise = user_model.getUserById(uid);
+  Promise.then(function(response) {
+    return res.status(200).send({
+      "status":true, "message": response
     });
-    next(error);
-  }
+  }).catch(e => {
+    log.error(e.stack);
+    return res.status(500).send({
+      error: "Order failed to retrieved: "+e.message
+    });
+    next(e);
+  });
 }
 
 

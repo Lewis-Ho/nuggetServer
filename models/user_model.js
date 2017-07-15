@@ -39,7 +39,7 @@ exports.createUser = function (obj){
 
 exports.getUserById = function (id){
   return new Promise(function(resolve, reject) {
-    var sql = 'SELECT * FROM nuggetdb.user WHERE id=?'
+    var sql = 'SELECT * FROM nuggetdb.user WHERE user_id=?'
 
     pool.getConnection(function(err, connection) {
       if (err || typeof connection === "undefined") {
