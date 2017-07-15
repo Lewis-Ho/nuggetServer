@@ -34,6 +34,33 @@ exports.getAllOrders = function (){
 }
 
 
+exports.getAllRevisions = function (){
+  return new Promise(function(resolve, reject) {
+    var sql = 'SELECT * FROM nuggetdb.revision'
+
+    pool.getConnection(function(err, connection) {
+      if (err || typeof connection === "undefined") {
+        log.error("Unable to get a connection to the DB due to: " + err);
+        console.log ("Unable to get a connection to the DB due to: " + err);
+        reject(err);
+        if (connection)
+          connection.destroy();
+      } else {
+
+          var query=connection.query(sql, {}, function (err, response) {
+              connection.release();
+             if (err)
+                  reject(err);
+                else{
+                  resolve(response)
+                }
+          });
+        }
+    });
+  });
+}
+
+
 exports.getOrderByOrderId = function (id){
   return new Promise(function(resolve, reject) {
     var sql = 'SELECT * FROM nuggetdb.order WHERE id=?'
@@ -252,6 +279,32 @@ exports.updateRevisionStatus = function (revisionId, status){
 }
 
 
+exports.updateRevisionToReviewed = function (revisionId, sourceUrl, status){
+  return new Promise(function(resolve, reject) {
+    var sql = 'UPDATE nuggetdb.revision SET status=?, revised_source_url=? WHERE revision_id=? '
+
+    pool.getConnection(function(err, connection) {
+      if (err || typeof connection === "undefined") {
+        log.error("Unable to get a connection to the DB due to: " + err);
+        console.log ("Unable to get a connection to the DB due to: " + err);
+        reject(err);
+        if (connection)
+          connection.destroy();
+      } else {
+        var query = connection.query(sql, [status, sourceUrl, revisionId], function (err, response) {
+            connection.release();
+           if (err)
+              reject(err);
+            else{
+              resolve(response[0])
+            }
+        });
+      }
+    });
+  });
+}
+
+
 exports.createOrderHistory = function (transactionData){
   return new Promise(function(resolve, reject) {
     var sql = 'INSERT INTO nuggetdb.transaction_history SET ?'
@@ -269,7 +322,9 @@ exports.createOrderHistory = function (transactionData){
           "order_id": transactionData.order_id,
           "revision_id": transactionData.revision_id,
           "type": transactionData.type,
-          "credit_amount": transactionData.credit_amount
+          "credit_amount": transactionData.credit_amount,
+          "action": transactionData.action,
+          "note": transactionData.note
         }, function (err, response) {
           connection.release();
           if (err)

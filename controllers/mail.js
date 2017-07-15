@@ -1,6 +1,7 @@
 var path = require('path'),
     log = require('winston'),
     Promise = require("bluebird"),
+    config = require(path.join(__dirname, '..', 'config', 'config.json')),
     mailer   = require("mailer");
 
 // SEND - should take only receiver, senter email, email type
@@ -10,6 +11,7 @@ var path = require('path'),
 
 exports.sendOrderConfirmationEmail = function(req, res, next) {
   console.log('sendOrderConfirmationEmail')
+  console.log(req.body.receiver)
   if (!req.body) {
     res.status(400).send({
       "status":false, "message": "Request body is missing required properties"
@@ -17,15 +19,15 @@ exports.sendOrderConfirmationEmail = function(req, res, next) {
   }
   var body = req.body;
   mailer.send(
-      { host:           "smtp.mandrillapp.com"
+      { host:           config["mailchimp"].host
       , port:           587
-      , to:             body.receiver
-      , from:           "test@sagerize.com"
+      , to:             req.body.receiver
+      , from:           config["mailchimp"].sender
       , subject:        "Order confirmed!"
       , body:           "Your order has been confirmed"
       , authentication: "login"
-      , username:       'College Nugget'
-      , password:       'lOPdP18mRD-IDFhdIu87eg'//uses api key as password
+      , username:       config["mailchimp"].userName
+      , password:       config["mailchimp"].password
       }, function(err, result){
         if(err){
           console.log(err);
@@ -54,16 +56,16 @@ exports.sendOrderCompletedEmail = function(req, res, next) {
   }
   var body = req.body;
   mailer.send(
-      { host:           "smtp.mandrillapp.com"
-      , port:           587
-      , to:             body.receiver
-      , from:           "test@sagerize.com"
-      , subject:        "Reviewed!"
-      , body:           "Your order has been reviewed by our editors. Please go to '+body.url+' to review."
-      , authentication: "login"
-      , username:       'College Nugget'
-      , password:       'lOPdP18mRD-IDFhdIu87eg'//uses api key as password
-      }, function(err, result){
+    { host:           config["mailchimp"].host
+    , port:           587
+    , to:             req.body.receiver
+    , from:           config["mailchimp"].sender
+    , subject:        "Reviewed!"
+    , body:           "Your order has been reviewed by our editors. Please go to '+body.url+' to review."
+    , authentication: "login"
+    , username:       config["mailchimp"].userName
+    , password:       config["mailchimp"].password
+    }, function(err, result){
         if(err){
           console.log(err);
           res.status(500).send({
@@ -96,15 +98,15 @@ exports.sendAdminOrderAlert = function(req, res, next) {
   }
   var body = req.body;
   mailer.send(
-    { host:           "smtp.mandrillapp.com"
+    { host:           config["mailchimp"].host
     , port:           587
-    , to:             body.receiver
-    , from:           "test@sagerize.com"
+    , to:             req.body.receiver
+    , from:           config["mailchimp"].sender
     , subject:        "Order confirmed!"
     , body:           "New Order just came in. Download URL: " + body.fileUrl
     , authentication: "login"
-    , username:       'College Nugget'
-    , password:       'lOPdP18mRD-IDFhdIu87eg'//uses api key as password
+    , username:       config["mailchimp"].userName
+    , password:       config["mailchimp"].password
     }, function(err, result){
         if(err){
           console.log(err);

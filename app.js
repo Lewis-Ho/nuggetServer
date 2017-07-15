@@ -67,9 +67,12 @@ app.post('/order/create', order.createOrder);
 app.get('/order/all', order.all);
 app.get('/order/:id', order.getOrderByOrderId);
 app.get('/order/user/:uid', order.getOrdersByUserId);
+app.get('/order/revision/all', order.allRevision);
 app.post('/order/revision/create', order.createRevision);
 app.get('/order/revision/:id', order.getRevisionById);
 app.get('/order/revision/:id/update/status/:status', order.updateRevisionStatus);
+app.post('/order/revision/:id/reviewed', order.updateRevisionReviewed);
+
 
 // app.get('/order/:id/revision', order.getRevisionsByOrderId);
 // app.get('/order/:id/history', order.getOrderHistoryById);

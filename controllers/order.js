@@ -24,6 +24,22 @@ exports.all = function(req, res, next) {
   });
 }
 
+exports.allRevision = function(req, res, next) {
+  console.log('getAllOrders')
+  Promise = order_model.getAllRevisions();
+  Promise.then(function(response) {
+    return res.status(200).send({
+      "status":true, "message": response
+    });
+  }).catch(e => {
+    log.error(e.stack);
+    return res.status(500).send({
+      error: "Order failed to retrieved: "+e.message
+    });
+    next(e);
+  });
+}
+
 
 exports.getOrderByOrderId = function(req, res, next) {
   console.log('getOrderByOrderId')
@@ -174,6 +190,37 @@ exports.updateRevisionStatus = function(req, res, next) {
     next(e);
   });
 }
+
+
+exports.updateRevisionReviewed = function(req, res, next) {
+  console.log('updateRevisionStatus')
+  if (!req.params.id || !req.body.revised_source_url || !req.body.status) {
+    return res.status(400).send({ error: "Bad Request - Invalid rows parameter" })
+    return;
+  }
+  var revisionId = req.params.id;
+
+  order_model.getRevisionById(req.params.id).then(function(result){
+    if (result && Object.keys(result).length > 0 ) {
+      return order_model.updateRevisionToReviewed(req.params.id, req.body.revised_source_url, req.body.status)
+    } else {
+      return res.status(404).send({ error: "Revision not found" })
+      return;
+    }
+  }).then(function(response) {
+    return res.status(200).send({
+      "status":true, "message": response
+    });
+  }).catch(e => {
+    log.error(e.stack);
+    return res.status(e.status || 500).send({
+      error: "Failed to update revision status: "+e.message
+    });
+    next(e);
+  });
+}
+
+
 
 exports.createOrderHistory = function(req, res, next) {
   console.log('createOrderHistory')
